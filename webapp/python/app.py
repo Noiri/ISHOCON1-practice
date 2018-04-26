@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from flask import Flask, request, abort, session, render_template, redirect
 import MySQLdb.cursors
 import os
@@ -15,7 +17,7 @@ app.secret_key = os.environ.get('ISHOCON1_SESSION_SECRET', 'showwin_happy')
 _config = {
     'db_host': os.environ.get('ISHOCON1_DB_HOST', 'localhost'),
     'db_port': int(os.environ.get('ISHOCON1_DB_PORT', '3306')),
-    'db_username': os.environ.get('ISHOCON1_DB_USER', 'ishocon'),
+    'db_username': os.environ.get('ISHOCON1_DB_USER', 'root'),
     'db_password': os.environ.get('ISHOCON1_DB_PASSWORD', 'ishocon'),
     'db_database': os.environ.get('ISHOCON1_DB_NAME', 'ishocon1'),
 }
@@ -132,7 +134,7 @@ def create_comment(product_id, user_id, content):
     cur.execute("""
 INSERT INTO comments (product_id, user_id, content, created_at)
 VALUES ({}, {}, '{}', '{}')
-""".format(product_id, user_id, content, to_utc(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')))
+""".format(product_id, user_id, content.encode('utf-8'), to_utc(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')))
 
 
 @app.errorhandler(401)
